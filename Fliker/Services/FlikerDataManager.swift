@@ -21,10 +21,11 @@ class FlikerDataManager {
     }
     
     struct FlikerAPI {
-        static let APIKey = ""
+        static let APIKey = "49795a867332ee6e4d2f9a2e87791b2c"
         
         static let tagsSearchFormat =  "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=%@&tags=%@&pages=%i&format=json&nojsoncallback=1"
     }
+    
     
     func fetchPhotoFor(searchText: String, page: Int, clousure: @escaping (NSError?, NSInteger, [FlikerPhotoModel]?) -> Void) -> Void {
         
@@ -35,12 +36,14 @@ class FlikerDataManager {
         
         let photoUrl = String(format: format, arguments)
         
-        let url = NSURL(string: photoUrl)!
+        let trimmed = photoUrl.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let url = NSURL(string: trimmed)!
         let request = URLRequest(url: url as URL)
         
         let searchTask = URLSession.shared.dataTask(with: request) { (data, responce, error) in
             if error != nil {
-                print("Error photo: ", error)
+                print("Error photo: \(error)")
                 clousure(error as NSError?, 0, nil)
             }
             
